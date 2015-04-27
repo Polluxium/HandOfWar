@@ -1,0 +1,4 @@
+public enum Mode
+{
+	HUMAN_V_HUMAN, COMPUTER_V_COMPUTER, HUMAN_V_COMPUTER,
+}
