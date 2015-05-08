@@ -8,8 +8,8 @@ public class Listener implements ActionListener
 	/* to make visible.													*/
 	int playerAmount = 0;
 
-	/* The checkManager will keep track of how many cards in the middle */
-	/* have been set to be visible.										*/
+	/* The checkManager will keep track of how many times you have 		*/
+	/* clicked the check button.										*/
 	int checkManager = 0;
 
 	/* The betAmount will be used to show you how much you have placed 	*/
@@ -19,7 +19,11 @@ public class Listener implements ActionListener
 	/* The cashAmount will just show you how much cash you have.		*/
 	int cashAmount = 0;
 
+	/* This will keep count of how many rounds have been played.		*/
+	int roundCounter = 1;
+
 	TestDisplay td = new TestDisplay();
+
 
 	/**
 	 * The actionPerformed() method is automatically called when a user
@@ -77,7 +81,6 @@ public class Listener implements ActionListener
 		if (e.getSource() == Graphics.btnDeal)
 		{
 			dealCards();
-			Graphics.btnDeal.setEnabled(false);
 		}
 
 		/* If the button pressed was the bet button, then display an 	*/
@@ -205,31 +208,85 @@ public class Listener implements ActionListener
 	 */
 	public void checkCards()
 	{
-		/* If checkManager is equal to 0, then use a for loop to loop 	*/
-		/* through the first three cards and show their face images 	*/
-		/* while adding one to the value of checkManager each time.		*/
-		/*																*/
-		/* If checkManager is equal to 3, then set the show the second 	*/
-		/* to last card's face image and add one to the value of 		*/
-		/* checkManager.
-		/*																*/
-		/* If checkManager is equal to four, then show the last cards 	*/
-		/* face image.													*/
-		if (checkManager == 0)
-		{
-			for(int i = 0; i < Graphics.centerCards.length - 2; i++)
-			{
+		/* Test the checkManager variable.								*/
+		switch(checkManager){
+			/* If checkManager's value is at 0, then just display the	*/
+			/* first three cards in the center cards array.  			*/
+			/* Update checkmanager by adding 1 to it.					*/
+			/* Exit the switch statemtnt.								*/
+			case 0:
+				for(int i = 0; i < Graphics.centerCards.length - 2; i++)
+				{
+					Graphics.centerCards[i].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
+				}
+				Graphics.btnDeal.setEnabled(false);
 				checkManager++;
-				Graphics.centerCards[i].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
-			}
-		} else if (checkManager == 3){
-			Graphics.centerCards[3].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
-			checkManager++;
-		} else if (checkManager == 4){
-			Graphics.centerCards[4].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
-			Graphics.btnCheck.setEnabled(false);
-			Graphics.btnBet.setEnabled(false);
-			checkManager = 0;
+				break;
+
+			/* If checkManager's value is 1 (which would mean that you  */
+			/* have clicked on the check button before), then display 	*/
+			/* the next card in the center cards array, which will be 	*/
+			/* the fourth card.											*/
+			/* Update checkManager by adding 1 to it.					*/
+			/* exit the switch statement.								*/
+			case 1:
+				Graphics.centerCards[3].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
+				checkManager++;
+				break;
+
+			/* If checkManager's value is 2 (which would mean that you 	*/
+			/* have clicked on it twice before), then display the last 	*/
+			/* center card.												*/
+			/* 															*/
+			/* Display a dialog box with the winner in it.				*/
+			/*															*/
+			/* Disable the bet button and the check button.				*/
+			/*															*/
+			/* If you have played four three rounds, then ask the user 	*/
+			/* if they want to play again.  If they dont, then just		*/
+			/* go back to the start screen.  If they do, then reset the */
+			/* Main Game Screen by calling the resetMainGameScreen() 	*/
+			/* method.  Set checkManager to 0, and roundCounter to 0.	*/
+			case 2:
+				Graphics.centerCards[4].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
+				JOptionPane.showMessageDialog(null, "Display Winner Here");
+				Graphics.btnBet.setEnabled(false);
+				Graphics.btnCheck.setEnabled(false);
+				roundCounter++;
+				if(roundCounter == 4){
+
+					int n = JOptionPane.showConfirmDialog(null,
+														"Would you like to play again?",
+														"Texas Holdem",
+														JOptionPane.YES_NO_OPTION);
+
+					if(n == JOptionPane.YES_OPTION)
+					{
+						resetMainGameScreen();
+						checkManager = 0;
+						roundCounter = 0;
+					}
+					if(n == JOptionPane.NO_OPTION)
+					{
+						resetGame();
+						Graphics.f.setContentPane(Graphics.labStartScreenGraphics);
+						Graphics.f.setSize(616,616);
+						Graphics.f.setLocationRelativeTo(null);
+						checkManager = 0;
+						roundCounter = 0;
+					}
+				} else {
+
+					/* If you have not played atleast three rounds then */
+					/* just call the resetMainGameScreen() method and 	*/
+					/* set checkManager to 0.							*/
+					resetMainGameScreen();
+					checkManager = 0;
+				}	// Outer if statement.
+				break;
+			/* If there is an error, just display an error message.		*/
+			default:
+				JOptionPane.showMessageDialog(null, "Error, Listener(Switch statement)");
 		}
 
 	}	// checkCards()
@@ -273,6 +330,29 @@ public class Listener implements ActionListener
 		Graphics.labEnemyBetAmountThr.setVisible(false);
 		Graphics.labEnemyTotalChipsOne.setVisible(false);
 		Graphics.labEnemyTotalChipsThr.setVisible(false);
-
 	}	// resetGame()
+
+
+	/**
+	 * The resetMainGameScreen() method will reset the settings of the
+	 * main game screen.  Like, setting the cards back to being face
+	 * down.  And re-enabling the buttons that were disabled.
+	 */
+	public void resetMainGameScreen()
+	{
+		/* Enable the buttons.											*/
+		Graphics.btnCheck.setEnabled(true);
+		Graphics.btnDeal.setEnabled(true);
+		Graphics.btnBet.setEnabled(true);
+
+		/* Display the back image for your cards.						*/
+		Graphics.yourCards[0].setIcon(new ImageIcon("res/CardBack.png"));
+		Graphics.yourCards[1].setIcon(new ImageIcon("res/CardBack.png"));
+
+		/* Reset the center cards so they are displaying the back image */
+		for(int i = 0; i < Graphics.centerCards.length; i++)
+		{
+			Graphics.centerCards[i].setIcon(new ImageIcon("res/CardBack.png"));
+		}
+	}	// resetMainGameScreen()
 }	// end of class

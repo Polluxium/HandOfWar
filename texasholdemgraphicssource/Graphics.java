@@ -364,8 +364,13 @@
 		labEnemyTotalChipsThr.setHorizontalAlignment(SwingConstants.CENTER);
 		labEnemyTotalChipsThr.setForeground(Color.white);
 		labGameScreenGraphics.add(labEnemyTotalChipsThr);
-	}
+	}	// makeGameScreenGraphics()
 
+
+	/**
+	 * The makePlayerAmountScreenGraphics() method will make the graphics
+	 * for the window that lets you enter your name.
+	 */
 	public void makePlayerAmountScreenGraphics()
 	{
 		labPlayerAmountGraphics = new JLabel();
