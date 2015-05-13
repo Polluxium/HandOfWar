@@ -195,7 +195,7 @@ public class Listener implements ActionListener
 	{
 		for(int i = 0; i < Graphics.yourCards.length; i++)
 		{
-			Graphics.yourCards[i].setIcon(new ImageIcon("res/51.gif"));
+			Graphics.yourCards[i].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
 		}
 	}	// dealCards();
 
@@ -213,6 +213,8 @@ public class Listener implements ActionListener
 			/* If checkManager's value is at 0, then just display the	*/
 			/* first three cards in the center cards array.  			*/
 			/* Update checkmanager by adding 1 to it.					*/
+			/* Call the qBetOrNot() method to see if the user wants to 	*/
+			/* bet or not.												*/
 			/* Exit the switch statemtnt.								*/
 			case 0:
 				for(int i = 0; i < Graphics.centerCards.length - 2; i++)
@@ -221,6 +223,7 @@ public class Listener implements ActionListener
 				}
 				Graphics.btnDeal.setEnabled(false);
 				checkManager++;
+				qBetOrNot();
 				break;
 
 			/* If checkManager's value is 1 (which would mean that you  */
@@ -228,12 +231,18 @@ public class Listener implements ActionListener
 			/* the next card in the center cards array, which will be 	*/
 			/* the fourth card.											*/
 			/* Update checkManager by adding 1 to it.					*/
+			/* Call the qBetOrNot() method to see if the user wants to 	*/
+			/* bet or not.												*/
 			/* exit the switch statement.								*/
 			case 1:
 				Graphics.centerCards[3].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
 				checkManager++;
+				qBetOrNot();
 				break;
 
+			/* Disregard the last paragraph in this block of comments 	*/
+			/* for now.													*/
+			/*															*/
 			/* If checkManager's value is 2 (which would mean that you 	*/
 			/* have clicked on it twice before), then display the last 	*/
 			/* center card.												*/
@@ -241,7 +250,7 @@ public class Listener implements ActionListener
 			/* Display a dialog box with the winner in it.				*/
 			/*															*/
 			/* Disable the bet button and the check button.				*/
-			/*															*/
+			/* 															*/
 			/* If you have played four three rounds, then ask the user 	*/
 			/* if they want to play again.  If they dont, then just		*/
 			/* go back to the start screen.  If they do, then reset the */
@@ -249,12 +258,32 @@ public class Listener implements ActionListener
 			/* method.  Set checkManager to 0, and roundCounter to 0.	*/
 			case 2:
 				Graphics.centerCards[4].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
-				JOptionPane.showMessageDialog(null, "Display Winner Here");
+
+				// Simulate revealing the other players cards here.
+				for(int i = 0; i < Graphics.opposCards.length; i++)
+				{
+					Graphics.opposCards[i].setIcon(null);
+					Graphics.opposCards[i].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
+				}
+
+
+				// Just simulate displaying who won here.
+				JOptionPane.showMessageDialog(null, "Display who won here.");
+
+
+				// Reset game settings.
+				resetMainGameScreen();
+				checkManager = 0;
+				roundCounter = 1;
 				Graphics.btnBet.setEnabled(false);
 				Graphics.btnCheck.setEnabled(false);
 				roundCounter++;
+
 				if(roundCounter == 4){
 
+
+					// Disregard this commented out code.
+					/*
 					int n = JOptionPane.showConfirmDialog(null,
 														"Would you like to play again?",
 														"Texas Holdem",
@@ -264,7 +293,7 @@ public class Listener implements ActionListener
 					{
 						resetMainGameScreen();
 						checkManager = 0;
-						roundCounter = 0;
+						roundCounter = 1;
 					}
 					if(n == JOptionPane.NO_OPTION)
 					{
@@ -273,8 +302,9 @@ public class Listener implements ActionListener
 						Graphics.f.setSize(616,616);
 						Graphics.f.setLocationRelativeTo(null);
 						checkManager = 0;
-						roundCounter = 0;
+						roundCounter = 1;
 					}
+					*/
 				} else {
 
 					/* If you have not played atleast three rounds then */
@@ -288,8 +318,42 @@ public class Listener implements ActionListener
 			default:
 				JOptionPane.showMessageDialog(null, "Error, Listener(Switch statement)");
 		}
-
 	}	// checkCards()
+
+
+	/**
+	 * The qBetOrNot() method will let the user say if they want to bet.
+	 */
+	public void qBetOrNot()
+	{
+		// ask the user if they want to bet
+		int n = JOptionPane.showConfirmDialog(null,
+								"Would you like to bet?",
+								"Texas Holdem",
+								JOptionPane.YES_NO_OPTION);
+
+		/* Check to see if they pressed yes.							*/
+		if (n == JOptionPane.YES_OPTION)
+		{
+			/* If they did press yes, then store what they type in for	*/
+			/* amound in a string and then try to convert that to an 	*/
+			/* integer.													*/
+			String strBetAmount = JOptionPane.showInputDialog("How Much?");
+			try{
+				betAmount = Integer.parseInt(strBetAmount);
+				// g.setBetAmount(betAmount);
+			} catch (NumberFormatException err){
+				JOptionPane.showMessageDialog(null, "Please enter a number");
+				qBetOrNot();
+			}
+
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(null, "Please, press check or fold.");
+			// g.skipBet();
+		}
+	}
 
 
 	/**
@@ -330,6 +394,10 @@ public class Listener implements ActionListener
 		Graphics.labEnemyBetAmountThr.setVisible(false);
 		Graphics.labEnemyTotalChipsOne.setVisible(false);
 		Graphics.labEnemyTotalChipsThr.setVisible(false);
+
+		/* Reset the player amount and name field.						*/
+		Graphics.txtPlayerAmount.setText("");
+		Graphics.txtEnterName.setText("");
 	}	// resetGame()
 
 
@@ -348,6 +416,13 @@ public class Listener implements ActionListener
 		/* Display the back image for your cards.						*/
 		Graphics.yourCards[0].setIcon(new ImageIcon("res/CardBack.png"));
 		Graphics.yourCards[1].setIcon(new ImageIcon("res/CardBack.png"));
+
+		/* Display the back image for the other players cards.			*/
+		for(int i = 0; i < Graphics.opposCards.length; i++)
+		{
+			Graphics.opposCards[i].setIcon(null);
+			Graphics.opposCards[i].setIcon(new ImageIcon("res/CardBack.png"));
+		}
 
 		/* Reset the center cards so they are displaying the back image */
 		for(int i = 0; i < Graphics.centerCards.length; i++)
