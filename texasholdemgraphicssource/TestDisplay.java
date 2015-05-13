@@ -13,5 +13,4 @@ public class TestDisplay
 	{
 		return rand.nextInt(51)+1;
 	}
-
 }

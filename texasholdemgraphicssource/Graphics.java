@@ -12,7 +12,6 @@
  public class Graphics extends JFrame
  {
 	static JFrame 			f;
-	static JPanel			p;
 
 	/* These will be the content panes used by the game.				*/
 	static JLabel			labStartScreenGraphics;
@@ -85,9 +84,6 @@
 			System.out.println("Something bad happened!! Call a javactor!!");
 		}
 		f = new JFrame("Texas Holdem Poker");
-
-		p = new JPanel();
-		p.setLayout(null);
 
 		setWindowLogo();
 		makeStartScreenGraphics();
