@@ -12,6 +12,8 @@ public class ComputerPlayer implements Player
 
 	private LinkedList<Card> playerHand = new LinkedList<Card>();
 
+	private LinkedList<Card> analyzeList;
+
 	private int chipsToBet = 0;
 	private boolean isPlayerTurn = false;
 
@@ -36,7 +38,7 @@ public class ComputerPlayer implements Player
 	}
 
 	@Override
-	public void beginGame()
+	public void clearHand()
 	{
 		playerHand.clear();
 	}
@@ -63,22 +65,13 @@ public class ComputerPlayer implements Player
 		Card h0 = playerHand.get(0);
 		Card h1 = playerHand.get(1);
 
-		Card t0 = tbl.getSpecCard(0);
-		Card t1 = tbl.getSpecCard(1);
-		Card t2 = tbl.getSpecCard(2);
-		Card t3 = tbl.getSpecCard(3);
-		Card t4 = tbl.getSpecCard(4);
+		Card t0 = playerHand.get(2);
+		Card t1 = playerHand.get(3);
+		Card t2 = playerHand.get(4);
+		Card t3 = playerHand.get(5);
+		Card t4 = playerHand.get(6);
 
-//		Card h0 = new Card(Suit.SPADES, 3);
-//		Card h1 = new Card(Suit.SPADES, 3);
-//
-//		Card t0 = new Card(Suit.HEARTS, 10);
-//		Card t1 = new Card(Suit.HEARTS, 11);
-//		Card t2 = new Card(Suit.HEARTS, 12);
-//		Card t3 = new Card(Suit.HEARTS, 13);
-//		Card t4 = new Card(Suit.HEARTS, 14);
-
-		LinkedList<Card> analyzeList = new LinkedList<Card>();
+		analyzeList = new LinkedList<Card>();
 
 		LinkedList<Card> playerPair  = new LinkedList<Card>();
 
@@ -101,41 +94,54 @@ public class ComputerPlayer implements Player
 
 		if(hA.hasRoyalFlush() == true)
 		{
+			System.out.println("Royal Flush");
 			return HandCombo.ROYAL_FLUSH;
 		}
-		if(hA.hasStraightFlush() == true)
+		else if(hA.hasStraightFlush() == true)
 		{
+			System.out.println("Straight Flush");
 			return HandCombo.STRAIGHT_FLUSH;
 		}
-		if(hA.hasFourOfAKind() == true)
+		else if(hA.hasFourOfAKind() == true)
 		{
+			System.out.println("Four of a kind");
 			return HandCombo.FOUR_OF_A_KIND;
 		}
-		if(hA.hasFullHouse() == true)
+		else if(hA.hasFullHouse() == true)
 		{
+			System.out.println("Full house");
 			return HandCombo.FULL_HOUSE;
 		}
-		if(hA.hasFlush() == true)
+		else if(hA.hasFlush() == true)
 		{
+			System.out.println("Flush");
 			return HandCombo.FLUSH;
 		}
-		if(hA.hasStraight() == true)
+		else if(hA.hasStraight() == true)
 		{
+			System.out.println("Straight");
 			return HandCombo.STRAIGHT;
 		}
-		if(hA.hasThreeOfAKind() == true)
+		else if(hA.hasThreeOfAKind() == true)
 		{
+			System.out.println("Three of a kind");
 			return HandCombo.THREE_OF_A_KIND;
 		}
-		if(hA.hasTwoPairs() == true)
+		else if(hA.hasTwoPairs() == true)
 		{
+			System.out.println("Two pair");
 			return HandCombo.TWO_PAIR;
 		}
-		if(hA.hasPair() == true)
+		else if(hA.hasPair() == true)
 		{
+			System.out.println("Pair");
 			return HandCombo.PAIR;
 		}
-		else return HandCombo.HIGH_CARD;
+		else
+		{
+			System.out.println("High Card");
+			return HandCombo.HIGH_CARD;
+		}
 
 
 

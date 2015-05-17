@@ -76,6 +76,31 @@ public class Game
 		putCardOnTable();
 	}
 
+	public void determineBestHand()
+	{
+		if(numberOfPlayers == 2){
+			System.out.println("Player ones hand: ");
+			p1.determineBestHand();
+			System.out.println("Player twos hand: ");
+			p2.determineBestHand();
+		} else if(numberOfPlayers == 3){
+			System.out.println("Player ones hand: ");
+			p1.determineBestHand();
+			System.out.println("Player twos hand: ");
+			p2.determineBestHand();
+			System.out.println("Player Threes hand: ");
+			p3.determineBestHand();
+		} else if (numberOfPlayers == 4){
+			System.out.println("Player ones hand: ");
+			p1.determineBestHand();
+			System.out.println("Player twos hand: ");
+			p2.determineBestHand();
+			System.out.println("Player Threes hand: ");
+			p3.determineBestHand();
+			System.out.println("Player Fours hand: ");
+			p4.determineBestHand();
+		}
+	}
 	//klkjhlkjhlkjhkjhlkjhlkh
 	public TableEntity getTableObj()
 	{
@@ -87,6 +112,20 @@ public class Game
 		tc = d.dealCard();
 		storeCenterTableCardImageIcons(tc);
 		tbl.accept(tc);
+		if(numberOfPlayers == 2)
+		{
+			p1.accept(tc);
+			p2.accept(tc);
+		} else if (numberOfPlayers == 3){
+			p1.accept(tc);
+			p2.accept(tc);
+			p3.accept(tc);
+		} else if (numberOfPlayers == 4){
+			p1.accept(tc);
+			p2.accept(tc);
+			p3.accept(tc);
+			p4.accept(tc);
+		}
 	}
 
 	public void setNumberOfPlayers(int n)
@@ -182,6 +221,7 @@ public class Game
 			storeEnemyCardImageIcons(c2);
 			p2.accept(c2);
 
+
 			c3 = d.dealCard();
 			storeEnemyCardImageIcons(c3);
 			p3.accept(c3);
@@ -191,7 +231,6 @@ public class Game
 			p4.accept(c4);
 		}
 	}
-
 
 	public void askForBets()
 	{
@@ -212,8 +251,25 @@ public class Game
 		wub = 0;
 		yWub = 0;
 		tWub = 0;
-		dealOneHand();
+		tbl.clearTableHand();
+		if(numberOfPlayers == 2)
+		{
+			p1.clearHand();
+			p2.clearHand();
+		} else if (numberOfPlayers == 3){
+			p1.clearHand();
+			p2.clearHand();
+			p3.clearHand();
+		} else if (numberOfPlayers == 4){
+			p1.clearHand();
+			p2.clearHand();
+			p3.clearHand();
+			p4.clearHand();
+		}
 		playTH();
+		dealOneHand();
+		determineBestHand();
+
 	}
 
 	public void storeEnemyCardImageIcons(Card crd)

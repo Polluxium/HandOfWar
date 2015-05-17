@@ -140,8 +140,9 @@ public class Listener implements ActionListener
 
 			case 2:
 				g = new Game(2);
-				g.dealOneHand();
 				g.playTH();
+				g.dealOneHand();
+				g.determineBestHand();
 				break;
 			/* If the user wants three players, then show the first 	*/
 			/* enemy card holder and then show the card  backs, just to */
@@ -159,8 +160,9 @@ public class Listener implements ActionListener
 
 				Graphics.f.setContentPane(Graphics.labNameScreenGraphics);
 				g = new Game(3);
-				g.dealOneHand();
 				g.playTH();
+				g.dealOneHand();
+				g.determineBestHand();
 				break;
 
 			/* If the user wants four players, show the first and last  */
@@ -188,17 +190,19 @@ public class Listener implements ActionListener
 				Graphics.f.setContentPane(Graphics.labNameScreenGraphics);
 
 				g = new Game(4);
-				g.dealOneHand();
 				g.playTH();
+				g.dealOneHand();
+				g.determineBestHand();
 				break;
 
 			/* If the user does not enter one of the options above, 	*/
 			/* then display a message telling the user that they must 	*/
 			/* enter an amount of users between 3 and 4.				*/
 			default:
-				 g = new Game(2);
-				 g.dealOneHand();
-				 g.playTH();
+				g = new Game(2);
+				g.playTH();
+				g.dealOneHand();
+				g.determineBestHand();
 		}	// end of switch statement
 	}	// setUpPlayers()
 

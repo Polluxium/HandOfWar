@@ -14,7 +14,7 @@ public interface Player
 	void getTableObj(TableEntity table);
 	void setIsPlayerTurn(boolean v);
 	public Card getSpecCard(int index);
-	void beginGame();							//reset the playerHand
+	void clearHand();							//reset the playerHand
 	void accept(Card c);						//makes the player add a card to their hand
 	void sortHand();
 	HandCombo determineBestHand();
