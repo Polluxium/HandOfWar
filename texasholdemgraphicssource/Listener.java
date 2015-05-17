@@ -6,7 +6,7 @@ public class Listener implements ActionListener
 {
 	/* The playerAmount will tell the listener how many other players 	*/
 	/* to make visible.													*/
-	int playerAmount = 0;
+	static int playerAmount = 0;
 
 	/* The checkManager will keep track of how many times you have 		*/
 	/* clicked the check button.										*/
@@ -24,6 +24,7 @@ public class Listener implements ActionListener
 
 	TestDisplay td = new TestDisplay();
 
+	static Game g;
 
 	/**
 	 * The actionPerformed() method is automatically called when a user
@@ -37,6 +38,7 @@ public class Listener implements ActionListener
 		if (e.getSource() == Graphics.btnSinglePlayer)
 		{
 			Graphics.f.setContentPane(Graphics.labNameScreenGraphics);
+			setUpPlayers(2);
 		}
 
 		/* If the button pressed is the confirm name button (the button */
@@ -136,6 +138,11 @@ public class Listener implements ActionListener
 		/* value.														*/
 		switch(pa){
 
+			case 2:
+				g = new Game(2);
+				g.dealOneHand();
+				g.playTH();
+				break;
 			/* If the user wants three players, then show the first 	*/
 			/* enemy card holder and then show the card  backs, just to */
 			/* simulate that there is another player there.				*/
@@ -151,6 +158,9 @@ public class Listener implements ActionListener
 				Graphics.labEnemyBetAmountOne.setVisible(true);
 
 				Graphics.f.setContentPane(Graphics.labNameScreenGraphics);
+				g = new Game(3);
+				g.dealOneHand();
+				g.playTH();
 				break;
 
 			/* If the user wants four players, show the first and last  */
@@ -176,13 +186,19 @@ public class Listener implements ActionListener
 				Graphics.labEnemyTotalChipsThr.setVisible(true);
 
 				Graphics.f.setContentPane(Graphics.labNameScreenGraphics);
+
+				g = new Game(4);
+				g.dealOneHand();
+				g.playTH();
 				break;
 
 			/* If the user does not enter one of the options above, 	*/
 			/* then display a message telling the user that they must 	*/
 			/* enter an amount of users between 3 and 4.				*/
 			default:
-				JOptionPane.showMessageDialog(null, "Please enter an amount of players between 3 and 4");
+				 g = new Game(2);
+				 g.dealOneHand();
+				 g.playTH();
 		}	// end of switch statement
 	}	// setUpPlayers()
 
@@ -195,7 +211,7 @@ public class Listener implements ActionListener
 	{
 		for(int i = 0; i < Graphics.yourCards.length; i++)
 		{
-			Graphics.yourCards[i].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
+			Graphics.yourCards[i].setIcon(g.showYourCards(i));
 		}
 	}	// dealCards();
 
@@ -219,7 +235,7 @@ public class Listener implements ActionListener
 			case 0:
 				for(int i = 0; i < Graphics.centerCards.length - 2; i++)
 				{
-					Graphics.centerCards[i].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
+					Graphics.centerCards[i].setIcon(g.showTableCard(i));
 				}
 				Graphics.btnDeal.setEnabled(false);
 				checkManager++;
@@ -235,7 +251,7 @@ public class Listener implements ActionListener
 			/* bet or not.												*/
 			/* exit the switch statement.								*/
 			case 1:
-				Graphics.centerCards[3].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
+				Graphics.centerCards[3].setIcon(g.showTableCard(3));
 				checkManager++;
 				qBetOrNot();
 				break;
@@ -257,13 +273,29 @@ public class Listener implements ActionListener
 			/* Main Game Screen by calling the resetMainGameScreen() 	*/
 			/* method.  Set checkManager to 0, and roundCounter to 0.	*/
 			case 2:
-				Graphics.centerCards[4].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
+				Graphics.centerCards[4].setIcon(g.showTableCard(4));
 
 				// Simulate revealing the other players cards here.
-				for(int i = 0; i < Graphics.opposCards.length; i++)
+				if(g.getNumberOfPlayers() == 2)
 				{
-					Graphics.opposCards[i].setIcon(null);
-					Graphics.opposCards[i].setIcon(new ImageIcon("res/"+td.getCard()+".gif"));
+					Graphics.opposCards[2].setIcon(g.showEnemyCards(0));
+					Graphics.opposCards[3].setIcon(g.showEnemyCards(1));
+				}
+				else if (g.getNumberOfPlayers() == 3)
+				{
+					Graphics.opposCards[0].setIcon(g.showEnemyCards(0));
+					Graphics.opposCards[1].setIcon(g.showEnemyCards(1));
+					Graphics.opposCards[2].setIcon(g.showEnemyCards(2));
+					Graphics.opposCards[3].setIcon(g.showEnemyCards(3));
+				}
+				else if (g.getNumberOfPlayers() == 4)
+				{
+					Graphics.opposCards[0].setIcon(g.showEnemyCards(0));
+					Graphics.opposCards[1].setIcon(g.showEnemyCards(1));
+					Graphics.opposCards[2].setIcon(g.showEnemyCards(2));
+					Graphics.opposCards[3].setIcon(g.showEnemyCards(3));
+					Graphics.opposCards[4].setIcon(g.showEnemyCards(4));
+					Graphics.opposCards[5].setIcon(g.showEnemyCards(5));
 				}
 
 
@@ -273,10 +305,13 @@ public class Listener implements ActionListener
 
 				// Reset game settings.
 				resetMainGameScreen();
+
 				checkManager = 0;
 				roundCounter = 1;
+
 				Graphics.btnBet.setEnabled(false);
 				Graphics.btnCheck.setEnabled(false);
+
 				roundCounter++;
 
 				if(roundCounter == 4){
@@ -398,6 +433,8 @@ public class Listener implements ActionListener
 		/* Reset the player amount and name field.						*/
 		Graphics.txtPlayerAmount.setText("");
 		Graphics.txtEnterName.setText("");
+
+		g.resetGame();
 	}	// resetGame()
 
 
@@ -429,5 +466,6 @@ public class Listener implements ActionListener
 		{
 			Graphics.centerCards[i].setIcon(new ImageIcon("res/CardBack.png"));
 		}
+		g.resetGame();
 	}	// resetMainGameScreen()
 }	// end of class
