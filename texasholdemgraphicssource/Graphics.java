@@ -68,9 +68,7 @@
 	/* End of Player Amount Scren Grpahical Components.					*/
 
 	static JLabel[]	opposCards 	= new JLabel[6];
-
 	static JLabel[] centerCards = new JLabel[5];
-
 	static JLabel[] yourCards 	= new JLabel[2];
 
 	/* End of Game Screen Graphical components.							*/
@@ -177,7 +175,7 @@
 		btnDeal.addActionListener(new Listener());
 		labGameScreenGraphics.add(btnDeal);
 
-		btnCheck = new JButton("Check");
+		btnCheck = new JButton("Call");
 		btnCheck.setBounds(150,510,125,25);
 		btnCheck.addActionListener(new Listener());
 		labGameScreenGraphics.add(btnCheck);
